@@ -1,0 +1,124 @@
+#include <stdio.h>
+#include <string.h>
+
+// Structure to represent a bank account
+struct BankAccount {
+    int accountNumber;
+    char accountHolder[50];
+    double balance;
+};
+
+// Function to transfer money between accounts
+void transferMoney(struct BankAccount *accounts, int numAccounts, int senderAccountNumber, int receiverAccountNumber, double amount) {
+    int senderIndex = -1, receiverIndex = -1;
+
+    // Find the indices of sender and receiver accounts
+    for (int i = 0; i < numAccounts; i++) {
+        if (accounts[i].accountNumber == senderAccountNumber) {
+            senderIndex = i;
+        }
+        if (accounts[i].accountNumber == receiverAccountNumber) {
+            receiverIndex = i;
+        }
+    }
+
+    // Check if both accounts exist
+    if (senderIndex != -1 && receiverIndex != -1) {
+        // Check if sender has sufficient balance
+        if (accounts[senderIndex].balance >= amount) {
+            // Perform the transfer
+            accounts[senderIndex].balance -= amount;
+            accounts[receiverIndex].balance += amount;
+            printf("Money transferred successfully!\n");
+        } else {
+            printf("Insufficient balance for the transfer.\n");
+        }
+    } else {
+        printf("Invalid account numbers. Please check and try again.\n");
+    }
+}
+
+// Function to create a new bank account
+void createAccount(struct BankAccount *accounts, int *numAccounts) {
+    printf("Enter account holder's name: ");
+    scanf(" %[^\n]s", accounts[*numAccounts].accountHolder);  // Read the name with spaces
+    printf("Enter initial balance: ");
+    scanf("%lf", &accounts[*numAccounts].balance);
+    
+    // Assign a unique account number (simple increment for demonstration)
+    accounts[*numAccounts].accountNumber = 1000 + (*numAccounts + 1);
+
+    printf("Account created successfully!\n");
+    (*numAccounts)++;
+}
+
+// Function to check the balance of an account
+void checkAmount(struct BankAccount *accounts, int numAccounts, int accountNumber) {
+    int accountIndex = -1;
+
+    // Find the index of the account
+    for (int i = 0; i < numAccounts; i++) {
+        if (accounts[i].accountNumber == accountNumber) {
+            accountIndex = i;
+            break;
+        }
+    }
+
+    // Check if the account exists
+    if (accountIndex != -1) {
+        printf("Account Holder: %s\n", accounts[accountIndex].accountHolder);
+        printf("Account Balance: %.2f\n", accounts[accountIndex].balance);
+    } else {
+        printf("Invalid account number. Please check and try again.\n");
+    }
+}
+
+int main() {
+    struct BankAccount accounts[50];  // Assuming a maximum of 50 accounts
+    int numAccounts = 0;
+    int choice, senderAccount, receiverAccount;
+    double amount;
+
+    printf("Bank Management System\n");
+
+    while (1) {
+        // Display menu
+        printf("\n1. Transfer Money\n");
+        printf("2. Create Account\n");
+        printf("3. Check Amount\n");
+        printf("4. Exit\n");
+        printf("Enter your choice: ");
+        scanf("%d", &choice);
+
+        // Check if the user wants to exit
+        if (choice == 4) {
+            break;
+        }
+
+        switch (choice) {
+            case 1:
+                printf("Enter sender's account number: ");
+                scanf("%d", &senderAccount);
+                printf("Enter receiver's account number: ");
+                scanf("%d", &receiverAccount);
+                printf("Enter the amount to transfer: ");
+                scanf("%lf", &amount);
+                transferMoney(accounts, numAccounts, senderAccount, receiverAccount, amount);
+                break;
+            case 2:
+                createAccount(accounts, &numAccounts);
+                break;
+            case 3:
+                printf("Enter account number to check balance: ");
+                scanf("%d", &senderAccount);
+                checkAmount(accounts, numAccounts, senderAccount);
+                break;
+            default:
+                printf("Invalid choice. Please enter a valid option.\n");
+        }
+    }
+
+    printf("Thank you for using the Bank Management System!\n");
+
+    return 0;
+}
