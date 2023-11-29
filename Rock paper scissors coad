@@ -1,0 +1,66 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <time.h>
+
+int generateComputerChoice() {
+    // Generate a random number (0, 1, or 2) to represent rock, paper, or scissors
+    return rand() % 3;
+}
+
+void determineWinner(int personChoice, int computerChoice, int *personScore, int *computerScore) {
+    // Compare choices and update scores
+    if ((personChoice == 0 && computerChoice == 2) ||
+        (personChoice == 1 && computerChoice == 0) ||
+        (personChoice == 2 && computerChoice == 1)) {
+        // Person wins
+        printf("Person wins!\n");
+        (*personScore)++;
+    } else if (personChoice == computerChoice) {
+        // It's a tie
+        printf("It's a tie!\n");
+    } else {
+        // Computer wins
+        printf("Computer wins!\n");
+        (*computerScore)++;
+    }
+}
+
+int main() {
+    int personScore = 0, computerScore = 0;
+    int personChoice, computerChoice;
+
+    // Seed the random number generator
+    srand(time(NULL));
+
+    printf("Rock Paper Scissors Game\n");
+
+    while (1) {
+        // Get person's choice
+        printf("\nChoose an option:\n");
+        printf("0 - Rock\n1 - Paper\n2 - Scissors\n");
+        printf("Enter your choice (or any other number to exit): ");
+        scanf("%d", &personChoice);
+
+        // Check if the user wants to exit
+        if (personChoice < 0 || personChoice > 2) {
+            break;
+        }
+
+        // Get computer's choice
+        computerChoice = generateComputerChoice();
+
+        // Display choices
+        printf("Person chose: %d\n", personChoice);
+        printf("Computer chose: %d\n", computerChoice);
+
+        // Determine the winner and update scores
+        determineWinner(personChoice, computerChoice, &personScore, &computerScore);
+
+        // Display scores
+        printf("Scores - Person: %d, Computer: %d\n", personScore, computerScore);
+    }
+
+    printf("Thanks for playing!\n");
+
+    return 0;
+}
