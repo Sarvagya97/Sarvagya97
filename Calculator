@@ -1,0 +1,80 @@
+#include <stdio.h>
+#include <math.h>
+
+int main() {
+    int choice;
+    double num1, num2, result;
+
+    printf("Simple Calculator\n");
+
+    while (1) {
+        // Display menu
+        printf("\n1. Addition\n");
+        printf("2. Subtraction\n");
+        printf("3. Multiplication\n");
+        printf("4. Division\n");
+        printf("5. Logarithmic values\n");
+        printf("6. Square root\n");
+        printf("7. Exit\n");
+        printf("Enter your choice: ");
+        scanf("%d", &choice);
+
+        // Check if the user wants to exit
+        if (choice == 7) {
+            break;
+        }
+
+        // Get input numbers
+        printf("Enter first number: ");
+        scanf("%lf", &num1);
+        
+        if (choice != 5 && choice != 6) {
+            printf("Enter second number: ");
+            scanf("%lf", &num2);
+        }
+
+        // Perform calculation based on user choice
+        switch (choice) {
+            case 1:
+                result = num1 + num2;
+                printf("Result: %.2f\n", result);
+                break;
+            case 2:
+                result = num1 - num2;
+                printf("Result: %.2f\n", result);
+                break;
+            case 3:
+                result = num1 * num2;
+                printf("Result: %.2f\n", result);
+                break;
+            case 4:
+                // Check if the second number is not zero for division
+                if (num2 != 0) {
+                    result = num1 / num2;
+                    printf("Result: %.2f\n", result);
+                } else {
+                    printf("Error: Division by zero\n");
+                }
+                break;
+            case 5:
+                result = log(num1);
+                printf("Result: %.2f\n", result);
+                break;
+            case 6:
+                // Check if the number is non-negative for square root
+                if (num1 >= 0) {
+                    result = sqrt(num1);
+                    printf("Result: %.2f\n", result);
+                } else {
+                    printf("Error: Square root of a negative number is undefined\n");
+                }
+                break;
+            default:
+                printf("Invalid choice. Please enter a valid option.\n");
+        }
+    }
+
+    printf("Thanks for using the calculator!\n");
+
+    return 0;
+}
