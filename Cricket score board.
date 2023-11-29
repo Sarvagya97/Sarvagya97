@@ -1,0 +1,101 @@
+#include <stdio.h>
+
+// Structure to represent a player
+struct Player {
+    char name[50];
+    int runsScored;
+    int ballsFaced;
+    char howOut[20];
+};
+
+// Structure to represent a team
+struct Team {
+    struct Player batsmen[11];
+    struct Player bowlers[11];
+    int totalRuns;
+    int wickets;
+    int oversBowled;
+};
+
+// Function to print match statistics
+void printMatchStatistics(struct Team *team) {
+    printf("MATCH STATISTICS\n");
+    printf("BATS\t\t\t\tRUNS\tBALLS\tHOW OUT\t\n");
+    
+    for (int i = 0; i < team->wickets; i++) {
+        printf("%-20s%-8d%-8d%-20s\n", team->batsmen[i].name, team->batsmen[i].runsScored, team->batsmen[i].ballsFaced, team->batsmen[i].howOut);
+    }
+
+    printf("\nTOTAL\t\t\t\t%d for %d wickets\n", team->totalRuns, team->wickets);
+}
+
+// Function to print runs scored
+void printRunsScored(struct Team *team) {
+    printf("\nRUNS SCORED\n");
+    printf("BATS\t\t\t\tRUNS\n");
+
+    for (int i = 0; i < team->wickets; i++) {
+        printf("%-20s%-8d\n", team->batsmen[i].name, team->batsmen[i].runsScored);
+    }
+}
+
+// Function to update score
+void updateScore(struct Team *team, int runs, int wickets, int overs) {
+    team->totalRuns = runs;
+    team->wickets = wickets;
+    team->oversBowled = overs;
+}
+
+// Function to show results
+void showResults(struct Team *team) {
+    printf("\nRESULTS\n");
+    printf("BOWLERS\t\t\tOVERS\tWICKETS\n");
+
+    for (int i = 0; i < team->wickets; i++) {
+        printf("%-20s%-8d%-8d\n", team->bowlers[i].name, team->bowlers[i].ballsFaced / 6, team->bowlers[i].runsScored);
+    }
+}
+
+int main() {
+    struct Team india, england; // Assume two teams for simplicity
+    int runs, wickets, overs;
+
+    // Initialize teams (dummy data for demonstration)
+    // India
+    strcpy(india.batsmen[0].name, "Player1");
+    india.batsmen[0].runsScored = 50;
+    india.batsmen[0].ballsFaced = 40;
+    strcpy(india.batsmen[0].howOut, "LBW");
+
+    strcpy(india.batsmen[1].name, "Player2");
+    india.batsmen[1].runsScored = 70;
+    india.batsmen[1].ballsFaced = 55;
+    strcpy(india.batsmen[1].howOut, "Caught");
+
+    india.totalRuns = 120;
+    india.wickets = 2;
+    india.oversBowled = 12;
+
+    // England
+    strcpy(england.bowlers[0].name, "Bowler1");
+    england.bowlers[0].runsScored = 25;
+    england.bowlers[0].ballsFaced = 36;
+
+    strcpy(england.bowlers[1].name, "Bowler2");
+    england.bowlers[1].runsScored = 30;
+    england.bowlers[1].ballsFaced = 42;
+
+    // Print initial match statistics
+    printMatchStatistics(&india);
+
+    // Assume the match progresses, and update the score
+    updateScore(&india, 180, 4, 25);
+
+    // Print updated runs scored
+    printRunsScored(&india);
+
+    // Print final results
+    showResults(&england);
+
+    return 0;
+}
