@@ -1,0 +1,90 @@
+import java.util.Scanner;
+
+class guesser{
+    int gusser_num;
+    public int gussernumber(){
+        Scanner sc=new Scanner(System.in);
+        System.out.print("gusser kindly guess a number: ");
+        gusser_num=sc.nextInt();
+        return gusser_num;
+    }
+}
+
+class player{
+    int player_num;
+    public int playernumber(){
+        Scanner sc=new Scanner(System.in);
+        player_num=sc.nextInt();
+        return player_num;
+    }
+}
+
+class umpire{
+    int gusserNum;
+    int playerNum_1;
+    int playerNum_2;
+    int playerNum_3;
+
+    public void collect_num_from_gusser(){
+        guesser gu=new guesser();
+        gusserNum=gu.gussernumber();
+    }
+    public void collect_num_from_player(){
+        player p1=new player();
+        player p2=new player();
+        player p3=new player();
+
+        System.out.print("player 1: ");
+        playerNum_1=p1.playernumber();
+
+        System.out.print("player 2: ");
+        playerNum_2=p2.playernumber();
+
+        System.out.print("player 3: ");
+        playerNum_3=p3.playernumber();
+
+    }   
+
+    public void compare(){
+        if(gusserNum==playerNum_1){
+            if(gusserNum==playerNum_2 && gusserNum==playerNum_3){
+                System.out.println("ALL PLAYER WON THE GAME");
+            }
+            else if(gusserNum==playerNum_2){
+                System.out.println("PLAYER 1 AND 2 WON THE GAME");
+            }
+            else if(gusserNum==playerNum_3){
+                System.out.println("PLAYER 1 AND 3 WON THE GAME");
+            }
+            else{
+                System.out.println("ONLY PLAYER 1 WON THE GAME");
+            }
+        }
+        else if(gusserNum==playerNum_2){
+            if(gusserNum==playerNum_3){
+                System.out.println("PLAYER 2 AND 3 WON THE GAME");
+            }
+            else{
+                System.out.println("PLAYER 2 WON THE GAME");
+            }
+        }
+        else if(gusserNum==playerNum_3){
+            System.out.println("ONLY PLAYER 3 WON THE GAME");
+        }
+        else{
+            System.out.println("ALL PLAYER LOST THE GAME");
+        }
+    }
+
+}
+
+public class guesser_game {
+    public static void main(String[] args) {
+        System.out.println("------GAME STARTED------");
+        umpire um=new umpire();
+        um.collect_num_from_gusser();
+        um.collect_num_from_player();
+        um.compare();
+        System.out.print("------GAME OVER------");
+    }
+}
