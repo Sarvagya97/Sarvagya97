@@ -1,0 +1,85 @@
+import speech_recognition as sr
+import webbrowser
+import pyttsx3
+import pocketsphinx  # still imported, though not used yet
+import musiclibrary
+import requests
+
+recognizer = sr.Recognizer()
+engine = pyttsx3.init()
+newsapi = "6a49a51d26304d688362412ef8db34bb"
+
+def speak(text):
+    engine.say(text)
+    engine.runAndWait()
+
+def processcommand(c):
+    if "open google" in c.lower():
+        webbrowser.open("https://google.com")
+    elif "open facebook" in c.lower():
+        webbrowser.open("https://facebook.com")
+    elif "open youtube" in c.lower():
+        webbrowser.open("https://youtube.com")     
+    elif "open linkedin" in c.lower():
+        webbrowser.open("https://linkedin.com")   
+    elif c.lower().startswith("play"):
+        try:
+            song = c.lower().split(" ", 1)[1]
+            link = musiclibrary.music.get(song)
+            if link:
+                webbrowser.open(link)
+            else:
+                speak(f"Sorry, I couldn't find the song {song}.")
+        except IndexError:
+            speak("Please say the song name after 'play'.")
+    elif "news" in c.lower():
+        try:
+            r = requests.get(
+                f"https://newsapi.org/v2/top-headlines?country=us&apiKey={newsapi}"
+            )
+            if r.status_code == 200:
+                data = r.json()
+                articles = data.get('articles', [])
+                speak("Here are the top news headlines.")
+                for article in articles[:5]:  # Top 5 headlines
+                    speak(article['title'])
+            else:
+                speak("Sorry, I couldn't fetch the news right now.")
+        except Exception as e:
+            print(f"News error: {e}")
+            speak("Something went wrong while fetching the news.")
+
+    
+
+if __name__ == "__main__":
+    speak("Initializing Jarvis...")
+    while True:
+        r = sr.Recognizer()
+        print("Recognizing...")
+
+        try:
+            with sr.Microphone() as source:
+                r.adjust_for_ambient_noise(source, duration=1)
+                print("Listening...")
+                audio = r.listen(source, timeout=5, phrase_time_limit=5)
+
+            word = r.recognize_google(audio)
+            print(f"You said: {word}")
+            if word.lower() == "jarvis":
+                speak("Yes?")
+
+                with sr.Microphone() as source:
+                    r.adjust_for_ambient_noise(source, duration=1)
+                    print("Jarvis active...")
+                    audio = r.listen(source, timeout=5, phrase_time_limit=7)
+                    command = r.recognize_google(audio)
+                    print(f"Command: {command}")
+                    processcommand(command)
+
+        except sr.WaitTimeoutError:
+            print("Timeout: No speech detected.")
+            continue
+        except sr.UnknownValueError:
+            print("Could not understand audio.")
+        except sr.RequestError as e:
+            print("Error; {0}".format(e))
